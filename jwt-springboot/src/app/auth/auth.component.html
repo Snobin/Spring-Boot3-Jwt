@@ -1,20 +1,29 @@
 <div class="login-signup-container">
     <h2>Login or Sign Up</h2>
     <form *ngIf="isLogin" (ngSubmit)="login()">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required>
+      <label for="username">Email:</label>
+      <input type="text" id="email" name="email" [(ngModel)]="user.email" required>
       <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required>
+      <input type="password" id="password" name="password" [(ngModel)]="user.password" required>
       <button type="submit">Login</button>
     </form>
   
     <form *ngIf="!isLogin" (ngSubmit)="signup()">
-      <label for="newUsername">New Username:</label>
-      <input type="text" id="newUsername" name="newUsername" required>
-      <label for="newPassword">New Password:</label>
-      <input type="password" id="newPassword" name="newPassword" required>
-      <button type="submit">Sign Up</button>
-    </form>
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" [(ngModel)]="user.email" required>
+      
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" name="firstname" [(ngModel)]="user.firstname" required>
+      
+        <label for="lastname">Last Name:</label>
+        <input type="text" id="lastname" name="lastname" [(ngModel)]="user.lastname" required>
+      
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" [(ngModel)]="user.password" required>
+      
+        <button type="submit">Sign Up</button>
+      </form>
+      
   
     <p *ngIf="isLogin">Don't have an account? <a (click)="toggleForm()">Sign Up</a></p>
     <p *ngIf="!isLogin">Already have an account? <a (click)="toggleForm()">Login</a></p>
