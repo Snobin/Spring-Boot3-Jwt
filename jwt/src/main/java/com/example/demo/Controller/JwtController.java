@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,12 +25,10 @@ public class JwtController {
     public JwtController(Authenticationservice auth) {
         this.auth = auth;
     }
-
     @PostMapping("/register")
     public ResponseEntity<Authenticationresponse> register(@RequestBody RegisterRequest rq) {
         return ResponseEntity.ok(auth.register(rq));
     }
-
     @PostMapping("/authenticate")
     public ResponseEntity<Authenticationresponse> authenticate(@RequestBody AuthenticationRequest req) {
         return ResponseEntity.ok(auth.authenticate(req));

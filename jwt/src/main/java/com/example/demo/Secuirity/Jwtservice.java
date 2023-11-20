@@ -41,7 +41,7 @@ public class Jwtservice {
 		return claimsResolver.apply(claims);
 	}
 
-	public String generateToken(UserDetails userDetails) {
+	public Map<String, String> generateToken(UserDetails userDetails) {
 		return generateToken(new HashMap<>(), userDetails);
 	}
 
@@ -61,18 +61,26 @@ public class Jwtservice {
 	}
 
 
-	public String generateToken(
-			Map<String, Object> extraClaims,
-			UserDetails userDetails
-			) {
-		return Jwts
-				.builder()
-				.setClaims(extraClaims)
-				.setSubject(userDetails.getUsername())
-				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-				.signWith(getSignInKey(),SignatureAlgorithm.HS256)
-				.compact();
-	}
+	   public Map<String, String> generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+	        Map<String, String> response = new HashMap<>();
+
+	        try {
+	            String token = Jwts.builder()
+	                    .setClaims(extraClaims)
+	                    .setSubject(userDetails.getUsername())
+	                    .setIssuedAt(new Date(System.currentTimeMillis()))
+	                    .setExpiration(new Date(System.currentTimeMillis() + (1000 * 60 * 24)))
+	                    .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+	                    .compact();
+
+	            response.put("token", token);
+	            response.put("message", "success");
+	        } catch (Exception e) {
+	            response.put("token", null);
+	            response.put("message", "Error generating token: " + e.getMessage());
+	        }
+
+	        return response;
+	    }
 
 }
