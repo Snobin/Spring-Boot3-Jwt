@@ -4,6 +4,7 @@ package com.example.demo.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -49,17 +50,27 @@ public class Authenticationservice {
 	}
 
 	public Authenticationresponse authenticate(AuthenticationRequest req) {
-		authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword())
-				);
-		var user=jwtrepository.findByEmail(req.getEmail())
-				.orElseThrow();
-		var jwtToken = jwtservice.generateToken(user);
+	    try {
+	        authenticationManager.authenticate(
+	                new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword())
+	        );
 
-	    Authenticationresponse authenticationResponse = new Authenticationresponse();
-	    authenticationResponse.setToken(jwtToken);
+	        var user = jwtrepository.findByEmail(req.getEmail())
+	                .orElseThrow();
 
-	    return authenticationResponse;
+	        var jwtToken = jwtservice.generateToken(user);
+
+	        Authenticationresponse authenticationResponse = new Authenticationresponse();
+	        authenticationResponse.setMessage("Success");
+	        authenticationResponse.setToken(jwtToken);
+
+	        return authenticationResponse;
+	    } catch (AuthenticationException e) {
+	        // Handle authentication failure (invalid username or password)
+	        Authenticationresponse errorResponse = new Authenticationresponse();
+	        errorResponse.setError("Invalid username or password");
+	        errorResponse.setMessage("Error");
+	        return errorResponse;
+	    }
 	}
-
 }

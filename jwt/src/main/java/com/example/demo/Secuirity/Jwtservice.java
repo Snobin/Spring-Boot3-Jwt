@@ -74,10 +74,10 @@ public class Jwtservice {
 	                    .compact();
 
 	            response.put("token", token);
-	            response.put("message", "success");
+	            
 	        } catch (Exception e) {
-	            response.put("token", null);
-	            response.put("message", "Error generating token: " + e.getMessage());
+	           
+	            response.put("message", "Error");
 	        }
 
 	        return response;
